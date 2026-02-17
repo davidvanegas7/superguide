@@ -179,6 +179,19 @@ solicitudes$.pipe(
   concatMap(solicitud => this.http.post('/api/procesar', solicitud))
 ).subscribe(console.log);
 
+// exhaustMap — Ignora nuevas emisiones mientras el Observable interno está activo
+// Ideal para prevenir doble envío de formularios o clicks repetidos
+botonEnviar$.pipe(
+  exhaustMap(() => this.http.post('/api/formulario', datos))
+).subscribe(respuesta => console.log('Enviado:', respuesta));
+// Si el usuario hace click varias veces mientras procesa, los clicks extra se IGNORAN
+
+// Comparativa rápida:
+// switchMap   → Cancela el anterior, emite el nuevo (búsqueda en tiempo real)
+// mergeMap    → Paralelo, todos corren a la vez (cargar múltiples IDs)
+// concatMap   → Secuencial, espera al anterior (procesar cola en orden)
+// exhaustMap  → Ignora nuevos mientras hay uno activo (submit de formulario)
+
 // scan — Acumulador (como reduce pero emite en cada paso)
 of(1, 2, 3, 4, 5).pipe(
   scan((acum, valor) => acum + valor, 0)
@@ -409,9 +422,10 @@ const datos = toSignal(datos$, { initialValue: [] });
 | Operador | Categoría | Descripción |
 |---|---|---|
 | `map` | Transformación | Transforma cada valor |
-| `switchMap` | Transformación | Cancela el anterior, ideal para HTTP |
-| `mergeMap` | Transformación | Paralelo, no cancela |
-| `concatMap` | Transformación | Secuencial |
+| `switchMap` | Transformación | Cancela el anterior, ideal para búsquedas |
+| `mergeMap` | Transformación | Paralelo, todos a la vez |
+| `concatMap` | Transformación | Secuencial, respeta el orden |
+| `exhaustMap` | Transformación | Ignora nuevos mientras hay uno activo (submit) |
 | `filter` | Filtrado | Solo pasa lo que cumple la condición |
 | `debounceTime` | Filtrado | Espera silencio antes de emitir |
 | `distinctUntilChanged` | Filtrado | Solo si cambia el valor |

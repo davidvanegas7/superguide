@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+/* Quitar sombra de texto que aplica typography en los code inline */
+.prose :where(code):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
+    box-shadow: none;
+    text-shadow: none;
+}

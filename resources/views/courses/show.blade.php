@@ -85,12 +85,28 @@
                 <span class="text-gray-500">{{ $done }} / {{ $total }} completadas</span>
                 <span class="font-semibold text-indigo-600">{{ $percent }}%</span>
             </div>
-            <div class="w-full bg-gray-100 rounded-full h-2">
+            <div class="w-full bg-gray-100 rounded-full h-2 mb-5">
                 <div class="bg-indigo-500 h-2 rounded-full transition-all" style="width: {{ $percent }}%"></div>
             </div>
+
+            {{-- Quiz de evaluación --}}
+            @php
+                $quiz = $course->quizzes()->where('published', true)->first();
+            @endphp
+            @if($quiz)
+                <a href="{{ route('quizzes.show', [$language, $course, $quiz]) }}"
+                   class="flex items-center gap-3 w-full px-4 py-3 bg-indigo-50 border border-indigo-200 rounded-xl hover:bg-indigo-100 hover:border-indigo-300 transition-all group">
+                    <span class="text-2xl">🧠</span>
+                    <div class="min-w-0">
+                        <p class="font-semibold text-indigo-700 text-sm group-hover:text-indigo-900 leading-tight">Evaluación del curso</p>
+                        <p class="text-xs text-indigo-500 mt-0.5 leading-tight">{{ $quiz->questions()->count() }} preguntas · Opción múltiple</p>
+                    </div>
+                </a>
+            @endif
         </div>
     </aside>
 
 </div>
 
 @endsection
+

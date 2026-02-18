@@ -41,11 +41,11 @@
         <div class="bg-white border border-gray-200 rounded-xl p-6 lg:p-10">
 
             {{-- Header de la lección --}}
-            <div class="flex items-start justify-between gap-4 mb-6">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $lesson->title }}</h1>
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
+                <div class="flex-1 min-w-0">
+                    <h1 class="text-xl sm:text-2xl font-bold text-gray-900">{{ $lesson->title }}</h1>
                     @if($lesson->excerpt)
-                        <p class="text-gray-500 mt-2">{{ $lesson->excerpt }}</p>
+                        <p class="text-gray-500 mt-2 text-sm sm:text-base">{{ $lesson->excerpt }}</p>
                     @endif
                     @if($lesson->tags->isNotEmpty())
                         <div class="flex gap-2 mt-3 flex-wrap">
@@ -58,7 +58,7 @@
                 </div>
                 <button id="markComplete"
                         data-lesson="{{ $lesson->id }}"
-                        class="shrink-0 flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors
+                        class="w-full sm:w-auto shrink-0 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors
                                {{ $isCompleted
                                     ? 'bg-green-50 text-green-700 border-green-300'
                                     : 'bg-white text-gray-600 border-gray-300 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300' }}">
@@ -70,36 +70,40 @@
             <hr class="border-gray-100 mb-8">
 
             {{-- Contenido Markdown convertido a HTML --}}
-            <article class="prose prose-gray max-w-none
+            <div class="overflow-x-auto -mx-6 lg:-mx-10">
+            <article class="prose prose-gray max-w-none px-6 lg:px-10
                             prose-headings:font-semibold prose-headings:text-gray-900
                             prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline
                             prose-code:font-mono prose-code:text-pink-600 prose-code:bg-pink-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-normal prose-code:before:content-none prose-code:after:content-none
-                            prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:rounded-xl prose-pre:shadow-none
-                            prose-table:border-collapse prose-th:bg-gray-100 prose-th:px-4 prose-th:py-2 prose-th:text-left prose-td:px-4 prose-td:py-2 prose-td:border prose-td:border-gray-200">
+                            prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:rounded-xl prose-pre:shadow-none prose-pre:text-xs sm:prose-pre:text-sm
+                            prose-table:border-collapse prose-th:bg-gray-100 prose-th:px-3 prose-th:py-2 prose-th:text-left prose-td:px-3 prose-td:py-2 prose-td:border prose-td:border-gray-200 prose-table:text-sm">
                 {!! $lesson->html_content !!}
             </article>
+            </div>
 
         </div>
 
         {{-- Navegación prev/next --}}
-        <div class="flex items-center justify-between mt-6">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mt-6">
             @if($prev)
                 <a href="{{ route('lessons.show', [$language, $course, $prev]) }}"
-                   class="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:border-indigo-300 hover:text-indigo-600 transition-colors">
-                    ← {{ $prev->title }}
+                   class="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:border-indigo-300 hover:text-indigo-600 transition-colors truncate">
+                    <span class="shrink-0">←</span>
+                    <span class="truncate">{{ $prev->title }}</span>
                 </a>
             @else
-                <div></div>
+                <div class="hidden sm:block"></div>
             @endif
 
             @if($next)
                 <a href="{{ route('lessons.show', [$language, $course, $next]) }}"
-                   class="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors">
-                    {{ $next->title }} →
+                   class="flex items-center justify-end gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors truncate">
+                    <span class="truncate">{{ $next->title }}</span>
+                    <span class="shrink-0">→</span>
                 </a>
             @else
                 <a href="{{ route('courses.show', [$language, $course]) }}"
-                   class="px-4 py-2.5 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+                   class="text-center px-4 py-2.5 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
                     🎉 Ver resumen del curso
                 </a>
             @endif

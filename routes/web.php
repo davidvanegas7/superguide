@@ -6,6 +6,7 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\ProgressController;
+use App\Http\Controllers\QuizController;
 
 // ─── Pública ───────────────────────────────────────────────────────────────
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -13,6 +14,8 @@ Route::get('/buscar', [HomeController::class, 'search'])->name('search');
 
 Route::get('/{language}', [LanguageController::class, 'show'])->name('languages.show');
 Route::get('/{language}/{course}', [CourseController::class, 'show'])->name('courses.show');
+Route::get('/{language}/{course}/quiz/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+Route::post('/{language}/{course}/quiz/{quiz}/check', [QuizController::class, 'check'])->name('quizzes.check');
 Route::get('/{language}/{course}/{lesson}', [LessonController::class, 'show'])->name('lessons.show');
 
 // ─── Progreso (AJAX) ────────────────────────────────────────────────────────

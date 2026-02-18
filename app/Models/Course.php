@@ -33,6 +33,11 @@ class Course extends Model
             ->orderBy('sort_order');
     }
 
+    public function quizzes(): HasMany
+    {
+        return $this->hasMany(Quiz::class);
+    }
+
     public function getLevelLabelAttribute(): string
     {
         return match($this->level) {

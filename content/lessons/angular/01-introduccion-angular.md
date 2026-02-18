@@ -112,6 +112,8 @@ La CLI te hará algunas preguntas:
 ? Do you want to enable Server-Side Rendering (SSR)? No
 ```
 
+> **¿Qué es SSR?** *Server-Side Rendering* significa que Angular renderiza la aplicación en el servidor antes de enviarla al navegador. Esto mejora el SEO y el tiempo de carga inicial, pero añade complejidad de configuración (servidor Node.js, manejo especial de `window`/`document`, etc.). Para **aprender Angular** responde **No** — lo cubriremos en detalle en la lección dedicada [SSR con Angular Universal](/angular/angular-completo/ssr-angular-universal).
+
 Luego entra al proyecto e inícialo:
 
 ```bash

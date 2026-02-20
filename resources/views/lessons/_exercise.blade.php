@@ -1,9 +1,6 @@
 {{-- Datos del ejercicio como JSON (sin problemas de escaping en Blade) --}}
 <script type="application/json" id="sg-exercise-data">
-{
-    "starterCode": {!! json_encode($exercise->starter_code) !!},
-    "language":    {{ json_encode($exercise->language) }}
-}
+{!! json_encode(['starterCode' => $exercise->starter_code, 'language' => $exercise->language]) !!}
 </script>
 
 {{-- ── Panel del ejercicio ──────────────────────────────────────────────────── --}}

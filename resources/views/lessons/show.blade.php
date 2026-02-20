@@ -81,6 +81,11 @@
             </article>
             </div>
 
+            {{-- Ejercicio de práctica --}}
+            @if($lesson->exercise)
+                @include('lessons._exercise', ['exercise' => $lesson->exercise])
+            @endif
+
         </div>
 
         {{-- Navegación prev/next --}}

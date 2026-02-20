@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 
 class Lesson extends Model
@@ -32,6 +33,11 @@ class Lesson extends Model
     public function progress(): HasMany
     {
         return $this->hasMany(Progress::class);
+    }
+
+    public function exercise(): HasOne
+    {
+        return $this->hasOne(LessonExercise::class);
     }
 
     /**

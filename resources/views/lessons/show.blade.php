@@ -74,7 +74,7 @@
             <article class="prose prose-gray max-w-none px-6 lg:px-10
                             prose-headings:font-semibold prose-headings:text-gray-900
                             prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline
-                            prose-code:font-mono prose-code:text-pink-600 prose-code:bg-pink-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-normal prose-code:before:content-none prose-code:after:content-none
+                            prose-code:font-mono prose-code:text-indigo-600 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-normal prose-code:before:content-none prose-code:after:content-none
                             prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:rounded-xl prose-pre:shadow-none prose-pre:text-xs sm:prose-pre:text-sm
                             prose-table:border-collapse prose-th:bg-gray-100 prose-th:px-3 prose-th:py-2 prose-th:text-left prose-td:px-3 prose-td:py-2 prose-td:border prose-td:border-gray-200 prose-table:text-sm">
                 {!! $lesson->html_content !!}
@@ -83,7 +83,11 @@
 
             {{-- Ejercicio de práctica --}}
             @if($lesson->exercise)
-                @include('lessons._exercise', ['exercise' => $lesson->exercise])
+                @if($lesson->exercise->language === 'excel')
+                    @include('lessons._spreadsheet', ['exercise' => $lesson->exercise])
+                @else
+                    @include('lessons._exercise', ['exercise' => $lesson->exercise])
+                @endif
             @endif
 
         </div>

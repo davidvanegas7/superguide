@@ -12,12 +12,19 @@ class ProgressController extends Controller
     {
         $request->validate(['lesson_id' => 'required|exists:lessons,id']);
 
-        $sessionId = session()->getId();
-
-        $progress = Progress::firstOrCreate(
-            ['session_id' => $sessionId, 'lesson_id' => $request->lesson_id],
-            ['completed' => false]
-        );
+        if (auth()->check()) {
+            // Usuario autenticado: guarda el progreso vinculado a su cuenta
+            $progress = Progress::firstOrCreate(
+                ['user_id' => auth()->id(), 'lesson_id' => $request->lesson_id],
+                ['session_id' => session()->getId(), 'completed' => false]
+            );
+        } else {
+            // Visitante anónimo: guarda el progreso por sesión
+            $progress = Progress::firstOrCreate(
+                ['session_id' => session()->getId(), 'lesson_id' => $request->lesson_id],
+                ['completed' => false]
+            );
+        }
 
         $progress->completed    = !$progress->completed;
         $progress->completed_at = $progress->completed ? now() : null;

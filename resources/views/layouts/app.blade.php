@@ -7,6 +7,8 @@
     <title>@yield('title', 'SuperGuide') — Aprende a programar</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    {{-- Highlight.js para syntax highlighting --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
@@ -34,8 +36,25 @@
                             </svg>
                         </button>
                     </form>
-                    <a href="{{ route('admin.languages.index') }}"
-                       class="text-sm text-gray-500 hover:text-indigo-600 font-medium">Admin</a>
+                    @auth
+                        @if(auth()->user()->isAdmin())
+                            <a href="{{ route('admin.languages.index') }}"
+                               class="text-sm text-gray-500 hover:text-indigo-600 font-medium">Admin</a>
+                        @endif
+                        <span class="text-sm text-gray-600 font-medium">{{ auth()->user()->name }}</span>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit"
+                                    class="text-sm text-gray-500 hover:text-red-600 font-medium transition-colors">
+                                Salir
+                            </button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}"
+                           class="text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors">
+                            Iniciar sesión
+                        </a>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -61,6 +80,9 @@
         </div>
     </footer>
 
+    {{-- Highlight.js --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
     @stack('scripts')
 </body>
 </html>

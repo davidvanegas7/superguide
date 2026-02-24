@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -21,7 +22,24 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
+
+    /** Comprueba si el usuario tiene rol admin */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function progress(): HasMany
+    {
+        return $this->hasMany(Progress::class);
+    }
+
+    public function quizResults(): HasMany
+    {
+        return $this->hasMany(QuizResult::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Language;
 use App\Models\Course;
 use App\Models\Quiz;
+use App\Models\QuizResult;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -20,7 +21,15 @@ class QuizController extends Controller
 
         $questions = $quiz->questions()->with('options')->get();
 
-        return view('quizzes.show', compact('language', 'course', 'quiz', 'questions'));
+        // Último resultado del usuario autenticado
+        $lastResult = auth()->check()
+            ? QuizResult::where('user_id', auth()->id())
+                ->where('quiz_id', $quiz->id)
+                ->latest()
+                ->first()
+            : null;
+
+        return view('quizzes.show', compact('language', 'course', 'quiz', 'questions', 'lastResult'));
     }
 
     public function check(Request $request, Language $language, Course $course, Quiz $quiz): JsonResponse
@@ -30,11 +39,10 @@ class QuizController extends Controller
             404
         );
 
-        $answers  = $request->input('answers', []);  // ['question_id' => 'option_id', ...]
+        $answers   = $request->input('answers', []);  // ['question_id' => 'option_id', ...]
         $questions = $quiz->questions()->with('options')->get();
-
-        $results = [];
-        $correct = 0;
+        $results   = [];
+        $correct   = 0;
 
         foreach ($questions as $question) {
             $selectedId  = $answers[$question->id] ?? null;
@@ -45,19 +53,33 @@ class QuizController extends Controller
             if ($isCorrect) $correct++;
 
             $results[] = [
-                'question_id'  => $question->id,
-                'is_correct'   => $isCorrect,
-                'explanation'  => $question->explanation,
-                'correct_option_id' => $correctOpt?->id,
+                'question_id'        => $question->id,
+                'is_correct'         => $isCorrect,
+                'explanation'        => $question->explanation,
+                'correct_option_id'  => $correctOpt?->id,
                 'selected_option_id' => $selectedId ? (int) $selectedId : null,
             ];
         }
 
+        $total   = $questions->count();
+        $percent = $total > 0 ? round($correct / $total * 100) : 0;
+
+        // Guarda el resultado si el usuario está autenticado
+        if (auth()->check()) {
+            QuizResult::create([
+                'user_id' => auth()->id(),
+                'quiz_id' => $quiz->id,
+                'score'   => $correct,
+                'total'   => $total,
+                'percent' => $percent,
+            ]);
+        }
+
         return response()->json([
-            'score'    => $correct,
-            'total'    => $questions->count(),
-            'percent'  => $questions->count() > 0 ? round($correct / $questions->count() * 100) : 0,
-            'results'  => $results,
+            'score'   => $correct,
+            'total'   => $total,
+            'percent' => $percent,
+            'results' => $results,
         ]);
     }
 }

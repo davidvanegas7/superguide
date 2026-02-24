@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 
 class LessonExercise extends Model
 {
-    protected $fillable = ['lesson_id', 'title', 'description', 'starter_code', 'language'];
+    use HasFactory;
+    protected $fillable = ['lesson_id', 'title', 'description', 'starter_code', 'solution_code', 'language'];
 
     public function lesson(): BelongsTo
     {

@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tags', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->string('color', 7)->default('#10b981');
-            $table->timestamps();
+        Schema::table('lesson_exercises', function (Blueprint $table) {
+            $table->longText('solution_code')->nullable()->after('starter_code');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tags');
+        Schema::table('lesson_exercises', function (Blueprint $table) {
+            $table->dropColumn('solution_code');
+        });
     }
 };

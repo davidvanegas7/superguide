@@ -16,6 +16,9 @@ class LanguageSeeder extends Seeder
             ['name' => 'Python',     'color' => '#3776ab', 'icon' => '🐍', 'description' => 'Versátil y legible. Usado en IA, data science y scripting.'],
             ['name' => 'TypeScript', 'color' => '#3178c6', 'icon' => '🔷', 'description' => 'JavaScript con tipos estáticos. Más robusto y mantenible.'],
             ['name' => 'SQL',        'color' => '#e38c00', 'icon' => '🗄️', 'description' => 'El lenguaje estándar para consultar bases de datos relacionales.'],
+            ['name' => 'Ruby',       'color' => '#cc342d', 'icon' => '💎', 'description' => 'Lenguaje elegante y expresivo. Diseñado para la felicidad del programador.'],
+            ['name' => 'Elixir',    'color' => '#6e4a7e', 'icon' => '💧', 'description' => 'Lenguaje funcional sobre la BEAM. Concurrencia masiva y tolerancia a fallos.'],
+            ['name' => 'Excel',     'color' => '#217346', 'icon' => '📊', 'description' => 'La herramienta de hojas de cálculo más usada del mundo. Fórmulas, tablas dinámicas y automatización.'],
         ];
 
         foreach ($languages as $i => $lang) {
